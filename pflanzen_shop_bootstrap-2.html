@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GreenLeaf Shop – mit Admin</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f7faf7;
+      color: #1f2a1f;
+    }
+    .navbar-brand {
+      font-weight: 800;
+      letter-spacing: 0.3px;
+    }
+    .hero {
+      background: linear-gradient(rgba(16, 48, 28, 0.55), rgba(16, 48, 28, 0.55)),
+        url('https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?auto=format&fit=crop&w=1600&q=80') center/cover;
+      color: white;
+      border-radius: 0 0 2rem 2rem;
+      padding: 6rem 0;
+    }
+    .hero h1 {
+      font-size: clamp(2.2rem, 4vw, 4rem);
+      font-weight: 800;
+    }
+    .section-title {
+      font-weight: 800;
+      margin-bottom: 1rem;
+    }
+    .category-card,
+    .product-card,
+    .info-card,
+    .admin-card {
+      border: none;
+      border-radius: 1.25rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+      overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      background: white;
+    }
+    .category-card:hover,
+    .product-card:hover,
+    .info-card:hover,
+    .admin-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.09);
+    }
+    .category-img,
+    .product-img {
+      height: 220px;
+      object-fit: cover;
+      width: 100%;
+    }
+    .badge-soft {
+      background: #e4f3e7;
+      color: #24613a;
+      font-weight: 600;
+      border-radius: 999px;
+      padding: 0.45rem 0.8rem;
+    }
+    .price {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #1d6b3c;
+    }
+    .filter-btn.active {
+      background-color: #198754;
+      color: white;
+      border-color: #198754;
+    }
+    .icon-box {
+      width: 52px;
+      height: 52px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #e4f3e7;
+      color: #1d6b3c;
+      border-radius: 1rem;
+      font-size: 1.25rem;
+      font-weight: 800;
+    }
+    .btn-success,
+    .btn-outline-success,
+    .form-control,
+    .form-select {
+      border-radius: 0.9rem;
+    }
+    .form-control,
+    .form-select {
+      padding: 0.8rem 1rem;
+    }
+    .admin-preview {
+      background: #f8fbf8;
+      border: 2px dashed #cfe4d4;
+      border-radius: 1rem;
+      min-height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #6c757d;
+      text-align: center;
+      padding: 1rem;
+      overflow: hidden;
+    }
+    .admin-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 0.75rem;
+    }
+    .small-meta {
+      font-size: 0.92rem;
+      color: #5b6c5f;
+    }
+    .product-meta {
+      font-size: 0.92rem;
+      color: #4f5e52;
+      margin-bottom: 0.7rem;
+    }
+    footer {
+      background: #173020;
+      color: rgba(255,255,255,0.9);
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg bg-white sticky-top shadow-sm">
+    <div class="container">
+      <a class="navbar-brand text-success" href="#">🌿 GreenLeaf Shop</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center gap-lg-2">
+          <li class="nav-item"><a class="nav-link" href="#admin">Pflanze hinzufügen</a></li>
+          <li class="nav-item"><a class="nav-link" href="#produkte">Produkte</a></li>
+          <li class="nav-item"><a class="nav-link" href="#kontakt">Kontakt</a></li>
+          <li class="nav-item"><a class="btn btn-success ms-lg-2" href="#admin">Jetzt hinzufügen</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="container">
+      <span class="badge-soft d-inline-block mb-3">Pflanzen-Shop mit einfacher Admin-Maske</span>
+      <h1>Füge Pflanzen mit Foto, Name, Alter und Preis direkt hinzu.</h1>
+      <p class="mt-3 mb-4">Du musst nicht jedes Mal in den Code gehen. Unten kannst du Bilder hochladen und die Pflanze direkt in deinen Shop einfügen.</p>
+      <div class="d-flex flex-wrap gap-3">
+        <a href="#admin" class="btn btn-success btn-lg">Pflanze hinzufügen</a>
+        <a href="#produkte" class="btn btn-outline-light btn-lg">Zum Shop</a>
+      </div>
+    </div>
+  </header>
+
+  <section id="admin" class="py-5">
+    <div class="container py-3">
+      <div class="row g-4 align-items-start">
+        <div class="col-lg-7">
+          <div class="admin-card p-4 p-lg-5">
+            <h2 class="section-title mb-2">Neue Pflanze hinzufügen</h2>
+            <p class="text-secondary mb-4">Lade ein Foto hoch und trage die Informationen ein. Die Pflanze erscheint danach sofort unten im Shop.</p>
+
+            <form id="plantForm" class="row g-3">
+              <div class="col-12">
+                <label for="plantImage" class="form-label fw-semibold">Foto der Pflanze</label>
+                <input class="form-control" type="file" id="plantImage" accept="image/*" required>
+              </div>
+
+              <div class="col-md-6">
+                <label for="plantName" class="form-label fw-semibold">Name der Pflanze</label>
+                <input type="text" class="form-control" id="plantName" placeholder="z. B. Monstera" required>
+              </div>
+
+              <div class="col-md-6">
+                <label for="plantAge" class="form-label fw-semibold">Alter</label>
+                <input type="text" class="form-control" id="plantAge" placeholder="z. B. 2 Jahre" required>
+              </div>
+
+              <div class="col-md-6">
+                <label for="plantPrice" class="form-label fw-semibold">Preis in €</label>
+                <input type="number" class="form-control" id="plantPrice" step="0.01" min="0" placeholder="z. B. 24.90" required>
+              </div>
+
+              <div class="col-md-6">
+                <label for="plantCategory" class="form-label fw-semibold">Kategorie</label>
+                <select class="form-select" id="plantCategory" required>
+                  <option value="zimmer">Zimmerpflanzen</option>
+                  <option value="sukkulenten">Sukkulenten</option>
+                  <option value="kraeuter">Kräuter</option>
+                  <option value="zubehoer">Zubehör</option>
+                </select>
+              </div>
+
+              <div class="col-12">
+                <label for="plantDescription" class="form-label fw-semibold">Beschreibung</label>
+                <textarea class="form-control" id="plantDescription" rows="4" placeholder="Kurze Beschreibung der Pflanze" required></textarea>
+              </div>
+
+              <div class="col-12 d-flex flex-wrap gap-2">
+                <button type="submit" class="btn btn-success px-4">Produkt hinzufügen</button>
+                <button type="button" id="clearAllBtn" class="btn btn-outline-danger">Alle hinzugefügten Produkte löschen</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="col-lg-5">
+          <div class="admin-card p-4 p-lg-5">
+            <h3 class="fw-bold mb-3">Vorschau</h3>
+            <div id="imagePreview" class="admin-preview mb-3">
+              Hier erscheint dein Pflanzenfoto
+            </div>
+            <div class="small-meta">
+              <p class="mb-2"><strong>Hinweis:</strong> Diese einfache Version speichert die Produkte im Browser deines Geräts.</p>
+              <p class="mb-0">Wenn du später willst, kann man daraus auch eine richtige Version mit Login, Datenbank und echtem Admin-Bereich machen.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="produkte" class="py-5 bg-white">
+    <div class="container py-3">
+      <div class="row align-items-end g-3 mb-4">
+        <div class="col-lg-6">
+          <h2 class="section-title">Deine Pflanzen im Shop</h2>
+          <p class="text-secondary mb-0">Neue Produkte aus dem Formular werden automatisch hier eingefügt.</p>
+        </div>
+        <div class="col-lg-6">
+          <div class="d-flex flex-wrap justify-content-lg-end gap-2">
+            <button class="btn btn-outline-success filter-btn active" data-filter="all">Alle</button>
+            <button class="btn btn-outline-success filter-btn" data-filter="zimmer">Zimmerpflanzen</button>
+            <button class="btn btn-outline-success filter-btn" data-filter="sukkulenten">Sukkulenten</button>
+            <button class="btn btn-outline-success filter-btn" data-filter="kraeuter">Kräuter</button>
+            <button class="btn btn-outline-success filter-btn" data-filter="zubehoer">Zubehör</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4" id="productGrid">
+        <div class="col-md-6 col-xl-3 product-item" data-category="zimmer">
+          <div class="card product-card h-100">
+            <img class="product-img" src="https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&w=900&q=80" alt="Monstera">
+            <div class="card-body d-flex flex-column">
+              <span class="badge-soft align-self-start mb-3">Zimmerpflanze</span>
+              <h5 class="fw-bold">Monstera Deliciosa</h5>
+              <div class="product-meta">Alter: 2 Jahre</div>
+              <p class="text-secondary">Beliebte Trendpflanze mit großen dekorativen Blättern.</p>
+              <div class="mt-auto d-flex justify-content-between align-items-center gap-2 flex-wrap">
+                <span class="price">24,90 €</span>
+                <button class="btn btn-success">Anfragen</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="kontakt" class="py-5">
+    <div class="container py-3">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="card info-card h-100 p-4">
+            <div class="icon-box mb-3">1</div>
+            <h5 class="fw-bold">Einfach hinzufügen</h5>
+            <p class="text-secondary mb-0">Foto auswählen, Daten eingeben und direkt im Shop anzeigen lassen.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card info-card h-100 p-4">
+            <div class="icon-box mb-3">2</div>
+            <h5 class="fw-bold">Ideal für den Start</h5>
+            <p class="text-secondary mb-0">Perfekt für einen kleinen Pflanzenverkauf ohne kompliziertes System.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card info-card h-100 p-4">
+            <div class="icon-box mb-3">3</div>
+            <h5 class="fw-bold">Später erweiterbar</h5>
+            <p class="text-secondary mb-0">Danach kann man Bezahlung, Datenbank und Admin-Login ergänzen.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="py-4 mt-5">
+    <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+      <p class="mb-0">© 2026 GreenLeaf Shop – Pflanzen online verkaufen</p>
+      <div class="d-flex gap-3">
+        <a href="#" class="text-white text-decoration-none">Impressum</a>
+        <a href="#" class="text-white text-decoration-none">Datenschutz</a>
+        <a href="#" class="text-white text-decoration-none">Kontakt</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const plantForm = document.getElementById('plantForm');
+    const plantImageInput = document.getElementById('plantImage');
+    const imagePreview = document.getElementById('imagePreview');
+    const productGrid = document.getElementById('productGrid');
+    const clearAllBtn = document.getElementById('clearAllBtn');
+    let currentImageData = '';
+
+    const categoryLabels = {
+      zimmer: 'Zimmerpflanze',
+      sukkulenten: 'Sukkulente',
+      kraeuter: 'Kräuter',
+      zubehoer: 'Zubehör'
+    };
+
+    function formatPrice(value) {
+      return Number(value).toLocaleString('de-DE', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }) + ' €';
+    }
+
+    function createProductCard(product) {
+      const col = document.createElement('div');
+      col.className = 'col-md-6 col-xl-3 product-item';
+      col.setAttribute('data-category', product.category);
+
+      col.innerHTML = `
+        <div class="card product-card h-100">
+          <img class="product-img" src="${product.image}" alt="${product.name}">
+          <div class="card-body d-flex flex-column">
+            <span class="badge-soft align-self-start mb-3">${categoryLabels[product.category] || product.category}</span>
+            <h5 class="fw-bold">${product.name}</h5>
+            <div class="product-meta">Alter: ${product.age}</div>
+            <p class="text-secondary">${product.description}</p>
+            <div class="mt-auto d-flex justify-content-between align-items-center gap-2 flex-wrap">
+              <span class="price">${formatPrice(product.price)}</span>
+              <button class="btn btn-success">Anfragen</button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      productGrid.prepend(col);
+    }
+
+    function saveProducts(products) {
+      localStorage.setItem('greenleafProducts', JSON.stringify(products));
+    }
+
+    function loadProducts() {
+      const savedProducts = JSON.parse(localStorage.getItem('greenleafProducts') || '[]');
+      savedProducts.forEach(product => createProductCard(product));
+    }
+
+    plantImageInput.addEventListener('change', event => {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = e => {
+        currentImageData = e.target.result;
+        imagePreview.innerHTML = `<img src="${currentImageData}" alt="Vorschau">`;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    plantForm.addEventListener('submit', event => {
+      event.preventDefault();
+
+      if (!currentImageData) {
+        alert('Bitte lade zuerst ein Bild hoch.');
+        return;
+      }
+
+      const product = {
+        name: document.getElementById('plantName').value.trim(),
+        age: document.getElementById('plantAge').value.trim(),
+        price: document.getElementById('plantPrice').value,
+        category: document.getElementById('plantCategory').value,
+        description: document.getElementById('plantDescription').value.trim(),
+        image: currentImageData
+      };
+
+      createProductCard(product);
+
+      const savedProducts = JSON.parse(localStorage.getItem('greenleafProducts') || '[]');
+      savedProducts.unshift(product);
+      saveProducts(savedProducts);
+
+      plantForm.reset();
+      currentImageData = '';
+      imagePreview.innerHTML = 'Hier erscheint dein Pflanzenfoto';
+    });
+
+    clearAllBtn.addEventListener('click', () => {
+      const confirmDelete = confirm('Willst du wirklich alle selbst hinzugefügten Produkte löschen?');
+      if (!confirmDelete) return;
+
+      localStorage.removeItem('greenleafProducts');
+      location.reload();
+    });
+
+    document.addEventListener('click', event => {
+      if (!event.target.classList.contains('filter-btn')) return;
+
+      const buttons = document.querySelectorAll('.filter-btn');
+      const items = document.querySelectorAll('.product-item');
+      const filter = event.target.getAttribute('data-filter');
+
+      buttons.forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      items.forEach(item => {
+        const category = item.getAttribute('data-category');
+        item.style.display = filter === 'all' || category === filter ? 'block' : 'none';
+      });
+    });
+
+    loadProducts();
+  </script>
+</body>
+</html>
